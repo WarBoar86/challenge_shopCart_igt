@@ -31,8 +31,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     if (storagedCart) {
       return JSON.parse(storagedCart);
     }
-
-    
     return [];
   });
 
@@ -48,7 +46,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const isProductInCart:boolean = parsedCart.filter(p => p.id === productId).length >0;
 
 
-        if(newProduct && !isProductInCart){
+        if(newProduct ){//&& !isProductInCart){
 
           const updatedCart = [...cart, newProduct.data ]
           

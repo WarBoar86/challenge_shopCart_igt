@@ -14,7 +14,7 @@ interface Product {
   title: string;
   price: number;
   image: string;
-  amount: 1;
+  amount: number;
 }
 
 const Cart = (): JSX.Element => {
@@ -26,6 +26,7 @@ const Cart = (): JSX.Element => {
   const [cartFormatted,setCartformated]  = useState( cart.map(product => {
     
     // TODO
+    
         product.amount =1;
         return {
               ...product,
@@ -35,6 +36,25 @@ const Cart = (): JSX.Element => {
             }
      
 }));
+
+
+const newuu = cart.sort((a, b) => a.id - b.id)
+.reduce( (init, current,index)=>
+{
+ if(init.length === 0 || init[init.length-1].id !== current.id){
+  // current.amount++;
+
+  
+  init.push(current);
+}else{
+   if(init.length > 0 &&  init[init.length-1].id == current.id) init[init.length-1].amount++;
+  //  current.amount++
+ }
+return init;
+}, [] as Product[])
+
+console.log ('====================', newuu);
+
 
   let total =
     formatPrice(
@@ -102,7 +122,10 @@ const Cart = (): JSX.Element => {
         <tbody>
 
           {
-            cartFormatted.map(product => (
+            cartFormatted.map(product => {
+
+              return (
+                
               <tr data-testid="product" key={product.id}>
                 <td>
                   <img src={product.image} alt={product.title} />
@@ -148,9 +171,24 @@ const Cart = (): JSX.Element => {
                     <MdDelete size={20} />
                   </button>
                 </td>
-              </tr>
+              </tr>);
+              // if(product.id in cart ){
 
-            ))
+              //   product.amount = cartFormatted.reduce((acc, p)=>{
+
+              //     if(product.id == p.id) acc++;
+
+              //     return acc;
+              //   },0);
+
+              // }else{
+
+              //   return <h1>{product.amount}</h1>
+              // }
+
+              
+
+            })
           }
 
         </tbody>
