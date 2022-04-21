@@ -19,7 +19,10 @@ interface Product {
 
 const Cart = (): JSX.Element => {
 
-  const { cart, removeProduct, updateProductAmount } = useCart();
+  const { cart, removeProduct, updateProductAmount,
+    //-----------
+    addProduct, 
+  } = useCart();
 
 
 
@@ -32,7 +35,7 @@ const Cart = (): JSX.Element => {
 
       }else{
 
-        if(init.length > 0 &&  init[init.length-1].id == current.id){
+        if(init.length > 0 &&  init[init.length-1].id === current.id){
           init[init.length-1].amount++
         };
       }
@@ -75,7 +78,8 @@ const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
           
         pr.amount+=1
         pr.subtotal= pr.price*pr.amount;
-      
+        
+        updateProductAmount({productId:product.id, amount: product.amount-1});
       };
       return pr;
     });
@@ -83,8 +87,6 @@ const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
 
     setCartformated(updateCart);
   
-
-    updateProductAmount({productId:product.id, amount: product.amount});
 
   }
 
@@ -96,6 +98,8 @@ const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
           
         pr.amount-=1
         pr.subtotal= pr.price*pr.amount;
+
+        updateProductAmount({productId:product.id, amount: pr.amount +1});
       
       };
       return pr;
@@ -104,8 +108,6 @@ const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
 
     setCartformated(updateCart);
   
-
-    updateProductAmount({productId:product.id, amount: product.amount});
 
   }
 
@@ -184,21 +186,7 @@ const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
                   </button>
                 </td>
               </tr>);
-              // if(product.id in cart ){
 
-              //   product.amount = cartFormatted.reduce((acc, p)=>{
-
-              //     if(product.id == p.id) acc++;
-
-              //     return acc;
-              //   },0);
-
-              // }else{
-
-              //   return <h1>{product.amount}</h1>
-              // }
-
-              
 
             })
           }

@@ -37,7 +37,7 @@ const Home = (): JSX.Element => {
        sumAmount[product.id]=1;
      }
 
-     return sumAmount
+     return sumAmount;
 
   }, {} as CartItemsAmount)
 
