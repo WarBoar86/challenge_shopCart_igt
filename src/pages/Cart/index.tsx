@@ -21,40 +21,40 @@ const Cart = (): JSX.Element => {
 
   const { cart, removeProduct, updateProductAmount } = useCart();
 
-  
 
-  const [cartFormatted,setCartformated]  = useState( cart.map(product => {
-    
-    // TODO
-    
-        product.amount =1;
-        return {
-              ...product,
-              priceFormatted: formatPrice(product.price),
-              subtotal: product.price * product.amount
 
-            }
-     
+  const distinctCart = cart.sort((a, b) => a.id - b.id).reduce( (init, current)=>
+    {
+      if(init.length === 0 || init[init.length-1].id !== current.id){
+
+        current.amount =1;
+        init.push(current);
+
+      }else{
+
+        if(init.length > 0 &&  init[init.length-1].id == current.id){
+          init[init.length-1].amount++
+        };
+      }
+      return init;
+    }, [] as Product[]
+  );
+
+
+
+const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
+    
+  // TODO
+  // product.amount =1;
+  return {
+        ...product,
+        priceFormatted: formatPrice(product.price),
+        subtotal: product.price * product.amount
+
+      }
+            
 }));
-
-
-const newuu = cart.sort((a, b) => a.id - b.id)
-.reduce( (init, current,index)=>
-{
- if(init.length === 0 || init[init.length-1].id !== current.id){
-  // current.amount++;
-
-  
-  init.push(current);
-}else{
-   if(init.length > 0 &&  init[init.length-1].id == current.id) init[init.length-1].amount++;
-  //  current.amount++
- }
-return init;
-}, [] as Product[])
-
-console.log ('====================', newuu);
-
+          
 
   let total =
     formatPrice(
@@ -81,19 +81,31 @@ console.log ('====================', newuu);
     });
 
 
-      setCartformated(updateCart);
-    
+    setCartformated(updateCart);
+  
 
-      updateProductAmount({productId:product.id, amount: product.amount});
+    updateProductAmount({productId:product.id, amount: product.amount});
 
   }
 
   function handleProductDecrement(product: Product) {
     // TODO
-    product.amount-=1
-    
+    const updateCart = cartFormatted.map(pr =>  {
 
-    // updateProductAmount({productId:product.id, amount: product.amount});
+      if ( pr.id === product.id){  
+          
+        pr.amount-=1
+        pr.subtotal= pr.price*pr.amount;
+      
+      };
+      return pr;
+    });
+
+
+    setCartformated(updateCart);
+  
+
+    updateProductAmount({productId:product.id, amount: product.amount});
 
   }
 
