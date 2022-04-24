@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   MdDelete,
   MdAddCircleOutline,
@@ -19,44 +19,19 @@ interface Product {
 
 const Cart = (): JSX.Element => {
 
-  const { cart, removeProduct, updateProductAmount,
-    //-----------
-    addProduct, 
-  } = useCart();
+  const { cart, removeProduct, updateProductAmount} = useCart();
 
+  const cartFormatted = cart.map(product => {
+      
+    // TODO
+    return {
+          ...product,
+          priceFormatted: formatPrice(product.price),
+          subtotal: product.price * product.amount
 
-
-  const distinctCart = cart.sort((a, b) => a.id - b.id).reduce( (init, current)=>
-    {
-      if(init.length === 0 || init[init.length-1].id !== current.id){
-
-        current.amount =1;
-        init.push(current);
-
-      }else{
-
-        if(init.length > 0 &&  init[init.length-1].id === current.id){
-          init[init.length-1].amount++
-        };
-      }
-      return init;
-    }, [] as Product[]
-  );
-
-
-
-const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
-    
-  // TODO
-  // product.amount =1;
-  return {
-        ...product,
-        priceFormatted: formatPrice(product.price),
-        subtotal: product.price * product.amount
-
-      }
-            
-}));
+        }
+              
+  });
           
 
   let total =
@@ -71,53 +46,26 @@ const [cartFormatted,setCartformated]  = useState( distinctCart.map(product => {
 
   function handleProductIncrement(product: Product) {
     // TODO
-
-    const updateCart = cartFormatted.map(pr =>  {
-
-      if ( pr.id === product.id){  
-          
-        pr.amount+=1
-        pr.subtotal= pr.price*pr.amount;
-        
-        updateProductAmount({productId:product.id, amount: product.amount-1});
-      };
-      return pr;
-    });
-
-
-    setCartformated(updateCart);
+    updateProductAmount({productId:product.id, amount: product.amount+1});
   
 
   }
 
   function handleProductDecrement(product: Product) {
     // TODO
-    const updateCart = cartFormatted.map(pr =>  {
 
-      if ( pr.id === product.id){  
-          
-        pr.amount-=1
-        pr.subtotal= pr.price*pr.amount;
+    
+    updateProductAmount({productId:product.id, amount: product.amount -1});
 
-        updateProductAmount({productId:product.id, amount: pr.amount +1});
-      
-      };
-      return pr;
-    });
-
-
-    setCartformated(updateCart);
   
 
   }
 
   function handleRemoveProduct(productId: number) {
     // TODO
-
-    const updatedCart = cartFormatted.filter(pd => pd.id !== productId);
-    setCartformated(updatedCart);
-
+    
     removeProduct(productId);
+    
 
   }
 

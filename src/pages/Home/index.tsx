@@ -29,15 +29,12 @@ const Home = (): JSX.Element => {
 
   
   const cartItemsAmount = cart.reduce((sumAmount, product) => {
-     // TODO
+    // TODO
      
-     if(product.id in sumAmount){
-       sumAmount[product.id]++;
-     }else{
-       sumAmount[product.id]=1;
-     }
+    sumAmount[product.id]=product.amount;
 
-     return sumAmount;
+
+    return sumAmount;
 
   }, {} as CartItemsAmount)
 
@@ -54,10 +51,10 @@ const Home = (): JSX.Element => {
     loadProducts();
   }, []);
 
-  function handleAddProduct(id: number) {
+  async function  handleAddProduct(id: number) {
     // TODO
 
-      addProduct(id);
+      await addProduct(id);
 
   }
 
